@@ -9,6 +9,7 @@
 #include "sd.h"
 #include "types.h"
 #include "vc.h"
+#include "os.h"
 
 int hb_hid = -1;
 hb_sd_regs_t* homeboy_obj = NULL;
@@ -23,21 +24,6 @@ static _XL_OBJECTTYPE homeboy_class = {
     0,
     homeboy_event,
 };
-
-static inline u64 gettick() {
-    register u32 tbu;
-    register u32 tbl;
-
-    // clang-format off
-    __asm__ __volatile__(
-        "mftbl %0\n"
-        "mftbu %1\n"
-        ::
-        "r"(tbl), "r"(tbu));
-    // clang-format on
-
-    return (u64)((u64)tbu << 32 | tbl);
-}
 
 static void do_write() {
     homeboy_obj->ready = 0;

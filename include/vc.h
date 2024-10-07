@@ -175,14 +175,19 @@ bool xlHeapTake(void** ppHeap, s32 nByteCount);
 bool xlHeapFree(void** ppHeap);
 bool xlObjectMake(void** ppObject, void* pArgument, _XL_OBJECTTYPE* pType);
 
+void DCInvalidateRange(void* addr, u32 nBytes);
 void DCStoreRange(const void* buf, u32 len);
 void ICInvalidateRange(const void* buf, u32 len);
 
 void OSReport(const char* msg, ...);
+OSInterruptMask __OSMaskInterrupts(OSInterruptMask global);
+void OSInitThreadQueue(OSThreadQueue* queue);
 bool OSCreateThread(OSThread* thread, OSThreadFunc func, void* funcArg, void* stackBegin, u32 stackSize, s32 prio,
                     u16 flags);
 void OSResumeThread(OSThread* thread);
 void OSSuspendThread(OSThread* thread);
+void OSSleepThread(OSThreadQueue* queue);
+void OSWakeupThread(OSThreadQueue* queue);
 s64 OSGetTime(void);
 u32 OSGetTick(void);
 

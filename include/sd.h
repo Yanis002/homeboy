@@ -73,8 +73,10 @@
 #define SDIO_STATUS_CARD_INITIALIZED 0x10000
 #define SDIO_STATUS_CARD_SDHC        0x100000
 
+#if IS_WII
 #define READ_BL_LEN                  ((u8)(__sd0_csd[5] & 0x0f))
 #define WRITE_BL_LEN                 ((u8)(((__sd0_csd[12] & 0x03) << 2) | ((__sd0_csd[13] >> 6) & 0x03)))
+#endif
 
 #define SD_ERROR_SUCCESS             0
 #define SD_ERROR_INVAL               1
