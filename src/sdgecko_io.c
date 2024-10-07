@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-
-#define __USE_MISC
-
 #include <unistd.h>
 
 #define HW_DOL
@@ -750,7 +747,8 @@ static s32 __card_dataread(s32 drv_no, void* buf, u32 len) {
         }
 
         /* sleep 1us*/
-        usleep(1);
+		//! TODO: find why usleep isn't linking
+        // usleep(1);
     }
 
     res[0] = res[1] = 0xff;

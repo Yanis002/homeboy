@@ -6,7 +6,7 @@
 
 #if IS_GC
 
-s32 drv_no = EXI_CHANNEL_1;
+s32 drv_no = EXI_DEVICE_1;
 bool is_sdgecko = false;
 
 bool sdio_is_initialized(void) {
