@@ -111,7 +111,7 @@ static void do_status_update() {
     }
 }
 
-#if IS_OOT
+#if IS_WII && IS_OOT
 #define ADDR_OFFSET 0x08050000
 #else
 #define ADDR_OFFSET 0x100A0000
