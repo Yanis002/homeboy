@@ -59,13 +59,13 @@ typedef struct _exibus_priv {
     } while (0)
 
 #define __stringify(rn) #rn
-#define SPRG0	272
-#define mfspr(_rn) \
-({	register u32 _rval = 0; \
-	__asm__ __volatile__("mfspr %0," __stringify(_rn) \
-	: "=r" (_rval));\
-	_rval; \
-})
+#define SPRG0           272
+#define mfspr(_rn)                                                        \
+    ({                                                                    \
+        register u32 _rval = 0;                                           \
+        __asm__ __volatile__("mfspr %0," __stringify(_rn) : "=r"(_rval)); \
+        _rval;                                                            \
+    })
 
 static exibus_priv eximap[EXI_DEVICE_MAX];
 static vu32 (*const _exiReg)[5] = (u32(*)[])0xCC006800;

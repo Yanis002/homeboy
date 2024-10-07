@@ -29,41 +29,38 @@ distribution.
 
 -------------------------------------------------------------*/
 
-
 #ifndef __OGC_LWP_H__
 #define __OGC_LWP_H__
 
-/*! \file lwp.h 
+/*! \file lwp.h
 \brief Thread subsystem I
 
-*/ 
+*/
 
 #include <time.h>
 
 #include "types.h"
 
-#define LWP_CLOSED					-1
-#define LWP_SUCCESSFUL				0
-#define LWP_ALREADY_SUSPENDED		1
-#define LWP_NOT_SUSPENDED			2
+#define LWP_CLOSED            -1
+#define LWP_SUCCESSFUL        0
+#define LWP_ALREADY_SUSPENDED 1
+#define LWP_NOT_SUSPENDED     2
 
-#define LWP_PRIO_IDLE				0
-#define LWP_PRIO_NORMAL			   64
-#define LWP_PRIO_HIGHEST		  127
+#define LWP_PRIO_IDLE         0
+#define LWP_PRIO_NORMAL       64
+#define LWP_PRIO_HIGHEST      127
 
-#define LWP_THREAD_NULL				0xffffffff
-#define LWP_TQUEUE_NULL				0xffffffff
+#define LWP_THREAD_NULL       0xffffffff
+#define LWP_TQUEUE_NULL       0xffffffff
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 /*! \typedef u32 lwp_t
 \brief typedef for the thread context handle
 */
 typedef u32 lwp_t;
-
 
 /*! \typedef u32 lwpq_t
 \brief typedef for the thread queue's context handle
@@ -81,8 +78,7 @@ typedef u32 lwpq_t;
 
 \return 0 on success, <0 on error
 */
-s32 LWP_CreateThread(lwp_t *thethread,void* (*entry)(void *),void *arg,void *stackbase,u32 stack_size,u8 prio);
-
+s32 LWP_CreateThread(lwp_t* thethread, void* (*entry)(void*), void* arg, void* stackbase, u32 stack_size, u8 prio);
 
 /*! \fn s32 LWP_SuspendThread(lwp_t thethread)
 \brief Suspend the given thread.
@@ -92,7 +88,6 @@ s32 LWP_CreateThread(lwp_t *thethread,void* (*entry)(void *),void *arg,void *sta
 */
 s32 LWP_SuspendThread(lwp_t thethread);
 
-
 /*! \fn s32 LWP_ResumeThread(lwp_t thethread)
 \brief Resume the given thread.
 \param[in] thethread handle to the thread context which should be resumed.
@@ -100,7 +95,6 @@ s32 LWP_SuspendThread(lwp_t thethread);
 \return 0 on success, <0 on error
 */
 s32 LWP_ResumeThread(lwp_t thethread);
-
 
 /*! \fn BOOL LWP_ThreadIsSuspended(lwp_t thethread)
 \brief Test whether the given thread is suspended or not
@@ -110,7 +104,6 @@ s32 LWP_ResumeThread(lwp_t thethread);
 */
 bool LWP_ThreadIsSuspended(lwp_t thethread);
 
-
 /*! \fn lwp_t LWP_GetSelf(void)
 \brief Return the handle to the current thread.
 
@@ -118,33 +111,31 @@ bool LWP_ThreadIsSuspended(lwp_t thethread);
 */
 lwp_t LWP_GetSelf(void);
 
-
 /*! \fn s32 LWP_GetThreadPriority(lwp_t thethread)
 \brief Get the priority of the given thread.
-\param[in] thethread handle to the thread context whos priority should be returned. If NULL, the current thread will be taken.
+\param[in] thethread handle to the thread context whos priority should be returned. If NULL, the current thread will be
+taken.
 
 \return 0 on success, <0 on error
 */
 s32 LWP_GetThreadPriority(lwp_t thethread);
 
-
 /*! \fn void LWP_SetThreadPriority(lwp_t thethread,u32 prio)
 \brief Set the priority of the given thread.
-\param[in] thethread handle to the thread context whos priority should be changed. If NULL, the current thread will be taken.
-\param[in] prio new priority to set
+\param[in] thethread handle to the thread context whos priority should be changed. If NULL, the current thread will be
+taken. \param[in] prio new priority to set
 
 \return none
 */
-void LWP_SetThreadPriority(lwp_t thethread,u32 prio);
-
+void LWP_SetThreadPriority(lwp_t thethread, u32 prio);
 
 /*! \fn void LWP_YieldThread(void)
-\brief Yield the current thread to another one with higher priority or if not running at the same priority which state is runnable.
+\brief Yield the current thread to another one with higher priority or if not running at the same priority which state
+is runnable.
 
 \return none
 */
 void LWP_YieldThread(void);
-
 
 /*! \fn void LWP_Reschedule(u32 prio)
 \brief Reschedule all threads running at the given priority
@@ -154,7 +145,6 @@ void LWP_YieldThread(void);
 */
 void LWP_Reschedule(u32 prio);
 
-
 /*! \fn s32 LWP_JoinThread(lwp_t thethread,void **value_ptr)
 \brief Join the given thread.
 \param[in] thethread handle to the thread's context which should be joined to wait on termination.
@@ -162,8 +152,7 @@ void LWP_Reschedule(u32 prio);
 
 \return 0 on success, <0 on error
 */
-s32 LWP_JoinThread(lwp_t thethread,void **value_ptr);
-
+s32 LWP_JoinThread(lwp_t thethread, void** value_ptr);
 
 /*! \fn void LWP_InitQueue(lwpq_t *thequeue)
 \brief Initialize the thread synchronization queue
@@ -171,8 +160,7 @@ s32 LWP_JoinThread(lwp_t thethread,void **value_ptr);
 
 \return 0 on success, <0 on error
 */
-s32 LWP_InitQueue(lwpq_t *thequeue);
-
+s32 LWP_InitQueue(lwpq_t* thequeue);
 
 /*! \fn void LWP_CloseQueue(lwpq_t thequeue)
 \brief Close the thread synchronization queue and releas the handle
@@ -182,7 +170,6 @@ s32 LWP_InitQueue(lwpq_t *thequeue);
 */
 void LWP_CloseQueue(lwpq_t thequeue);
 
-
 /*! \fn s32 LWP_ThreadSleep(lwpq_t thequeue)
 \brief Pushes the current thread onto the given thread synchronization queue and sets the thread state to blocked.
 \param[in] thequeue handle to the thread's synchronization queue to push the thread on
@@ -191,16 +178,14 @@ void LWP_CloseQueue(lwpq_t thequeue);
 */
 s32 LWP_ThreadSleep(lwpq_t thequeue);
 
-
 /*! \fn s32 LWP_ThreadTimedSleep(lwpq_t thequeue,const struct timespec *abstime)
-\brief Pushes the current thread onto the given thread synchronization queue and sets the thread state to blocked until timeout.
-\param[in] thequeue handle to the thread's synchronization queue to push the thread on
-\param[in] abstime pointer to a timespec structure holding the abs time for the timeout.
+\brief Pushes the current thread onto the given thread synchronization queue and sets the thread state to blocked until
+timeout. \param[in] thequeue handle to the thread's synchronization queue to push the thread on \param[in] abstime
+pointer to a timespec structure holding the abs time for the timeout.
 
 \return 0 on success, <0 on error
 */
-s32 LWP_ThreadTimedSleep(lwpq_t thequeue,const struct timespec *abstime);
-
+s32 LWP_ThreadTimedSleep(lwpq_t thequeue, const struct timespec* abstime);
 
 /*! \fn void LWP_ThreadSignal(lwpq_t thequeue)
 \brief Signals one thread to be revmoved from the thread synchronization queue and sets it back to running state.
@@ -209,7 +194,6 @@ s32 LWP_ThreadTimedSleep(lwpq_t thequeue,const struct timespec *abstime);
 \return none
 */
 void LWP_ThreadSignal(lwpq_t thequeue);
-
 
 /*! \fn void LWP_ThreadBroadcast(lwpq_t thequeue)
 \brief Removes all blocked threads from the thread synchronization queue and sets them back to running state.
@@ -220,7 +204,7 @@ void LWP_ThreadSignal(lwpq_t thequeue);
 void LWP_ThreadBroadcast(lwpq_t thequeue);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 #endif

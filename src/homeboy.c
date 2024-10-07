@@ -6,10 +6,10 @@
 #include "cpu.h"
 #include "fs.h"
 #include "homeboy.h"
+#include "os.h"
 #include "sd.h"
 #include "types.h"
 #include "vc.h"
-#include "os.h"
 
 int hb_hid = -1;
 hb_sd_regs_t* homeboy_obj = NULL;

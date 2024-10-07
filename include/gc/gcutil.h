@@ -2,10 +2,10 @@
 #define __GCUTIL_H__
 
 #ifndef ATTRIBUTE_ALIGN
-# define ATTRIBUTE_ALIGN(v)					__attribute__((aligned(v)))
+#define ATTRIBUTE_ALIGN(v) __attribute__((aligned(v)))
 #endif
 #ifndef ATTRIBUTE_PACKED
-# define ATTRIBUTE_PACKED					__attribute__((packed))
+#define ATTRIBUTE_PACKED __attribute__((packed))
 #endif
 
 #endif /* __GCUTIL_H__ */

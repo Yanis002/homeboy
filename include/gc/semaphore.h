@@ -27,32 +27,28 @@ distribution.
 
 -------------------------------------------------------------*/
 
-
 #ifndef __OGC_SEMAPHORE_H__
 #define __OGC_SEMAPHORE_H__
 
-/*! \file semaphore.h 
+/*! \file semaphore.h
 \brief Thread subsystem IV
 
-*/ 
-
+*/
 
 #include <time.h>
 
 #include "types.h"
 
-#define LWP_SEM_NULL			0xffffffff
+#define LWP_SEM_NULL 0xffffffff
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 /*! \typedef u32 sem_t
 \brief typedef for the semaphore handle
 */
 typedef u32 sem_t;
-
 
 /*! \fn s32 LWP_SemInit(sem_t *sem,u32 start,u32 max)
 \brief Initializes a semaphore.
@@ -62,8 +58,7 @@ typedef u32 sem_t;
 
 \return 0 on success, <0 on error
 */
-s32 LWP_SemInit(sem_t *sem,u32 start,u32 max);
-
+s32 LWP_SemInit(sem_t* sem, u32 start, u32 max);
 
 /*! \fn s32 LWP_SemDestroy(sem_t sem)
 \brief Close and destroy a semaphore, release all threads and handles locked on this semaphore.
@@ -73,7 +68,6 @@ s32 LWP_SemInit(sem_t *sem,u32 start,u32 max);
 */
 s32 LWP_SemDestroy(sem_t sem);
 
-
 /*! \fn s32 LWP_SemWait(sem_t sem)
 \brief Count down semaphore counter and enter lock if counter <=0
 \param[in] sem handle to the sem_t structure.
@@ -82,7 +76,6 @@ s32 LWP_SemDestroy(sem_t sem);
 */
 s32 LWP_SemWait(sem_t sem);
 
-
 /*! \fn s32 LWP_SemTimedWait(sem_t sem,const struct timespec *abstime)
 \brief Count down semaphore counter and try to enter lock if counter <=0 until timeout.
 \param[in] sem handle to the sem_t structure.
@@ -90,8 +83,7 @@ s32 LWP_SemWait(sem_t sem);
 
 \return 0 on success, <0 on error
 */
-s32 LWP_SemTimedWait(sem_t sem,const struct timespec *abstime);
-
+s32 LWP_SemTimedWait(sem_t sem, const struct timespec* abstime);
 
 /*! \fn s32 LWP_SemTryWait(sem_t sem)
 \brief Count down semaphore counter and try to enter lock if counter <=0
@@ -101,7 +93,6 @@ s32 LWP_SemTimedWait(sem_t sem,const struct timespec *abstime);
 */
 s32 LWP_SemTryWait(sem_t sem);
 
-
 /*! \fn s32 LWP_SemPost(sem_t sem)
 \brief Count up semaphore counter and release lock if counter >0
 \param[in] sem handle to the sem_t structure.
@@ -110,7 +101,6 @@ s32 LWP_SemTryWait(sem_t sem);
 */
 s32 LWP_SemPost(sem_t sem);
 
-
 /*! \fn s32 LWP_SemGetValue(sem_t sem,u32 *value)
 \brief Get the semaphore counter.
 \param[in] sem handle to the sem_t structure.
@@ -118,10 +108,10 @@ s32 LWP_SemPost(sem_t sem);
 
 \return 0 on success, <0 on error
 */
-s32 LWP_SemGetValue(sem_t sem,u32 *value);
+s32 LWP_SemGetValue(sem_t sem, u32* value);
 
 #ifdef __cplusplus
-	}
+}
 #endif
 
 #endif

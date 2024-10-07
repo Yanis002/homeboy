@@ -1,8 +1,8 @@
-#include "types.h"
-#include "sd.h"
-#include "version.h"
-#include "gc/card_io.h"
 #include "exi.h"
+#include "gc/card_io.h"
+#include "sd.h"
+#include "types.h"
+#include "version.h"
 
 #if IS_GC
 
