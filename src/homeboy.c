@@ -70,6 +70,7 @@ static void do_read() {
 }
 
 static void do_status_update() {
+#if IS_WII
     if (homeboy_obj->reset) {
         int fd = fs_open(dram_fn, 3);
         if (fd < 0) {
@@ -87,6 +88,7 @@ static void do_status_update() {
 
         reset_flag = 1;
     }
+#endif
 
     if (homeboy_obj->initialize) {
         if (sdio_is_initialized()) {
