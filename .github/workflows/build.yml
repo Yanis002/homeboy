@@ -11,8 +11,8 @@ jobs:
     strategy:
       matrix:
         include:
-          GAME: OOT
-          GAME: MM
+          - GAME: OOT
+          - GAME: MM
     defaults:
       run:
         shell: bash
