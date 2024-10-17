@@ -1,7 +1,13 @@
-CC          = powerpc-eabi-gcc
-AS          = powerpc-eabi-gcc -x assembler-with-cpp
+ifneq ($(strip $(DEVKITPPC)),)
+PREFIX		= $(DEVKITPPC)/bin/powerpc-eabi-
+else
+PREFIX		= powerpc-eabi-
+endif
+
+CC          = $(PREFIX)gcc
+AS          = $(PREFIX)gcc -x assembler-with-cpp
 LD          = $(CC)
-OBJCOPY     = powerpc-eabi-objcopy
+OBJCOPY     = $(PREFIX)objcopy
 CFILES      = *.c
 SFILES      = *.s
 SRCDIR      = src
