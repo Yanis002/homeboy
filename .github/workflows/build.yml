@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        GAME: OOT
-        GAME: MM
+        include:
+          GAME: OOT
+          GAME: MM
     defaults:
       run:
         shell: bash
