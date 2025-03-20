@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "cpu.h"
+#include "mcardGCN.h"
 #include "os.h"
 #include "version.h"
 
@@ -148,6 +149,7 @@ typedef struct Ram {
 } Ram; // size = 0x48
 
 #define SYSTEM_CPU(pSystem) ((void*)(((System*)(pSystem))->apObject[SOT_CPU]))
+#define SYSTEM_ROM(pSystem) ((Rom*)(((System*)(pSystem))->apObject[SOT_ROM]))
 
 // xlObject.h
 typedef struct _XL_OBJECTTYPE _XL_OBJECTTYPE;
@@ -171,6 +173,16 @@ bool cpuSetDeviceGet(Cpu* pCPU, CpuDevice* pDevice, void* pfGet8, void* pfGet16,
 bool cpuSetDevicePut(Cpu* pCPU, CpuDevice* pDevice, void* pfPut8, void* pfPut16, void* pfPut32, void* pfPut64);
 bool cpuFindFunction(Cpu* pCPU, s32 theAddress, CpuFunction** tree_node);
 bool ramSetSize(Ram* pRAM, s32 nSize);
+bool simulatorRumbleStop(s32 channel);
+
+#if IS_GC
+
+bool mcardWrite(MemCard* pMCard, s32 address, s32 size, char* data);
+bool mcardOpenDuringGame(MemCard* pMCard);
+bool mcardUpdate(void);
+
+#endif
+
 bool xlHeapTake(void** ppHeap, s32 nByteCount);
 bool xlHeapFree(void** ppHeap);
 bool xlObjectMake(void** ppObject, void* pArgument, _XL_OBJECTTYPE* pType);
@@ -193,6 +205,7 @@ u32 OSGetTick(void);
 
 extern s32 ganMapGPR[32];
 extern System* gpSystem;
+extern u32 gnFlagZelda;
 
 // TODO: use decomp types and names
 #define cur_thread  (*(volatile OSThread**)0x800000C0)

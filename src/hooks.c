@@ -1,3 +1,6 @@
+#include <string.h>
+
+#include "frame.h"
 #include "hooks.h"
 #include "rom.h"
 #include "types.h"
@@ -5,12 +8,14 @@
 
 extern u8 cpuExecuteCall_hook_addr_ha[];
 extern u8 cpuExecuteCall_hook_addr_l[];
+extern u8 frameSetDepth_hook_addr[];
 
 #if IS_GC
 extern u8 videoForceRetrace[];
 extern u8 romSetCacheSize_hook_addr[];
 extern u8 romLoadRange_hook_addr_1[];
 extern u8 romLoadRange_hook_addr_2[];
+extern u8 mcardWrite_hook_addr[];
 #endif
 
 // Change an instruction in memory.
@@ -136,6 +141,18 @@ static s32 cpuExecuteCall_hook(Cpu* pCPU, s32 nCount, s32 nAddressN64, s32 nAddr
     return nAddressGCNCall;
 }
 
+// Replaces frameSetDepth, correctly converts N64 depth value to GC/Wii depth value.
+// In frameDrawSetup2D (used for gSPFillRectangle), the GC/Wii projection matrix is
+// set up so that the near plane is at 0 (z=0) and the far plane is at 1001 (z=-1001).
+// Meanwhile, the depth value passed to frameSetDepth is in the range [0, 1], so any
+// depth other than 0 is outside the GC/Wii view frustrum. This doesn't affect anything
+// in-game, but we fix it here for gz.
+bool frameSetDepth_hook(Frame* pFrame, f32 rDepth, f32 rDelta) {
+    pFrame->rDepth = rDepth * -1001.0f;
+    pFrame->rDelta = rDelta;
+    return true;
+}
+
 #if IS_GC
 
 bool romSetCacheSize_hook(Rom* pROM, s32 nSize) {
@@ -152,12 +169,43 @@ bool romSetCacheSize_hook(Rom* pROM, s32 nSize) {
     return true;
 }
 
+bool mcardWrite_hook(MemCard* pMCard, s32 address, s32 size, char* data) {
+    // if it's a gz save, run the non-OoT logic of mcardWrite (copy-pasted here)
+    // otherwise, call the real mcardWrite to keep the original behavior for a game save
+    if (address == 0x7A00) {
+        memcpy(&pMCard->file.game.buffer[address], data, size);
+
+        if (pMCard->saveToggle == true) {
+            simulatorRumbleStop(0);
+            if (!mcardUpdate()) {
+                return false;
+            }
+        } else {
+            pMCard->saveToggle = true;
+            pMCard->wait = false;
+            mcardOpenDuringGame(pMCard);
+            if (pMCard->saveToggle == true) {
+                if (!mcardUpdate()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    return mcardWrite(pMCard, address, size, data);
+}
+
 #endif
 
 void init_hooks(void) {
     // Replace reference to cpuExecuteCall in cpuExecute
     patch_ha(cpuExecuteCall_hook_addr_ha, cpuExecuteCall_hook);
     patch_l(cpuExecuteCall_hook_addr_l, cpuExecuteCall_hook);
+
+    // Replace call to frameSetDepth in rdbParseGBI
+    patch_bl(frameSetDepth_hook_addr, frameSetDepth_hook);
 
 #if IS_GC
     // Patches videoForceRetrace so that DMA can proceed even if N64 VI registers
@@ -173,5 +221,8 @@ void init_hooks(void) {
     // load to about the end of objects, skipping place names and skyboxes.
     patch_instruction(romLoadRange_hook_addr_1, 0x3CA0012D); // lis r5, 0x12D
     patch_instruction(romLoadRange_hook_addr_2, 0x3CA0012D); // lis r5, 0x12D
+
+    // Hook to mcardWrite to fix gz settings not saving
+    patch_bl(mcardWrite_hook_addr, mcardWrite_hook);
 #endif
 }

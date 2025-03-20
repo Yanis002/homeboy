@@ -1,20 +1,57 @@
 #ifndef _VERSION_H
 #define _VERSION_H
 
-#ifndef VC_VERSION
-#error no vc version specified
+#define D43J 1 // GameCube OOT Master Quest Japan
+#define D43E 2 // GameCube OOT Master Quest US
+#define PZLJ 3 // GameCube OOT Collector's Edition Japan
+#define PZLE 4 // GameCube OOT Collector's Edition US
+#define NACJ 5 // Wii OOT Japan
+#define NACE 6 // Wii OOT US
+#define NARJ 7 // Wii MM Japan
+#define NARE 8 // Wii MM US
+
+#if VC_VERSION == D43J
+#define IS_GC  1
+#define IS_OOT 1
+#elif VC_VERSION == D43E
+#define IS_GC  1
+#define IS_OOT 1
+#elif VC_VERSION == PZLJ
+#define IS_GC  1
+#define IS_OOT 1
+#elif VC_VERSION == PZLE
+#define IS_GC  1
+#define IS_OOT 1
+#elif VC_VERSION == NACJ
+#define IS_WII 1
+#define IS_OOT 1
+#elif VC_VERSION == NACE
+#define IS_WII 1
+#define IS_OOT 1
+#elif VC_VERSION == NARJ
+#define IS_WII 1
+#define IS_MM  1
+#elif VC_VERSION == NARE
+#define IS_WII 1
+#define IS_MM  1
+#else
+#error "Unknown version"
 #endif
 
-#define D43J   0 // GameCube OOT Master Quest Japan
-#define NACJ   1 // Wii OOT Japan
-#define NACE   2 // Wii OOT US
-#define NARJ   3 // Wii MM Japan
-#define NARE   4 // Wii MM US
+#ifndef IS_GC
+#define IS_GC 0
+#endif
 
-#define IS_GC  (VC_VERSION == D43J)
-#define IS_WII (VC_VERSION == NACJ || VC_VERSION == NACE || VC_VERSION == NARJ || VC_VERSION == NARE)
+#ifndef IS_WII
+#define IS_WII 0
+#endif
 
-#define IS_MM  (VC_VERSION == NARJ || VC_VERSION == NARE)
-#define IS_OOT (VC_VERSION == D43J || VC_VERSION == NACJ || VC_VERSION == NACE)
+#ifndef IS_OOT
+#define IS_OOT 0
+#endif
+
+#ifndef IS_MM
+#define IS_MM 0
+#endif
 
 #endif
