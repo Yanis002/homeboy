@@ -264,9 +264,8 @@ static u32 __card_checktimeout(s32 drv_no, u32 startT, u32 timeout) {
     return 1;
 }
 
-static s32 __exi_unlock(s32 chn, s32 dev) {
-    OSWakeupThread(&_ioEXILock[chn]);
-    return 1;
+static void __exi_unlock(s32 chan, OSContext* context) {
+    OSWakeupThread(&_ioEXILock[chan]);
 }
 
 static void __exi_wait(s32 drv_no) {
@@ -279,11 +278,10 @@ static void __exi_wait(s32 drv_no) {
     } while (ret == 0);
 }
 
-static s32 __card_exthandler(s32 chn, s32 dev) {
-    _ioFlag[chn] = NOT_INITIALIZED;
-    _ioCardInserted[chn] = false;
-    sdgecko_ejectedCB(chn);
-    return 1;
+static void __card_exthandler(s32 chan, OSContext* context) {
+    _ioFlag[chan] = NOT_INITIALIZED;
+    _ioCardInserted[chan] = false;
+    sdgecko_ejectedCB(chan);
 }
 
 static s32 __card_writecmd0(s32 drv_no) {

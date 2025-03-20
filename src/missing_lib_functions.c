@@ -76,10 +76,9 @@ u32 __lwp_isr_in_progress(void) {
     return isr_nest_level;
 }
 
-static s32 __exi_synccallback(s32 nChn, s32 nDev) {
-    exibus_priv* exi = &eximap[nChn];
+static void __exi_synccallback(s32 chan, OSContext* context) {
+    exibus_priv* exi = &eximap[chan];
     OSWakeupThread(&exi->syncqueue);
-    return 1;
 }
 
 static s32 __exi_syncex(s32 nChn) {
